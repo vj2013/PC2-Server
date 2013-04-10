@@ -1,0 +1,92 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <script language="javascript" type="text/javascript">
+var request = null;
+
+function createRequest() {
+try {
+request = new XMLHttpRequest();
+} catch (trymicrosoft) {
+try {
+request = new ActiveXObject("MsXML2.XMLHTTP");
+} catch (othermicrosoft) {
+try {
+request = new ActiveXObject("Microsoft.XMLHTTP");
+} catch (failed) {
+request = null;
+}
+}
+}
+
+if (request == null)
+alert("Error creating request object!");
+}
+function getMessage(){
+createRequest();
+var iid = document.getElementById("iid").value;
+id=eval(iid);
+var url = "http://localhost:8080/StudentServer/resources/ep.studiante.student/"+id;
+request.onreadystatechange = handleResponse;
+request.open("GET", url, true);
+request.send(null);
+}
+function handleResponse() {
+if (request.readyState==4 && request.status==200)
+{ 
+var xmlDocument=request.responseXML;
+var fnames = xmlDocument.getElementsByTagName("firstname");
+var lnames = xmlDocument.getElementsByTagName("lastname");
+var lidbsters = xmlDocument.getElementsByTagName("idbooster");
+var bthdates = xmlDocument.getElementsByTagName("birthdate");
+
+for(var i=0; i<fnames.length; i++) {
+var fname = fnames[i].childNodes[0].nodeValue;
+var lname = lnames[i].childNodes[0].nodeValue;
+var lidbster = lidbsters[i].childNodes[0].nodeValue;
+var bthdate = bthdates[i].childNodes[0].nodeValue;
+document.getElementById('firstname').value=fname;
+document.getElementById('lastname').value=lname;
+document.getElementById('idbooster').value=lidbster;
+document.getElementById('birthdate').value=bthdate;
+}
+}
+
+}
+</script>
+    </head>
+    <body>
+        <table>
+<tr>
+<td>ID : </td>
+<td><input type="text" id="iid" size="10"/>
+
+<input type="button" value="Get Details" onclick="getMessage()"/>
+</tr>
+<tr>
+<td>Last Name : </td>
+<td> <input type="text" id="lastname" size="10"/> </td>
+</tr>
+
+<tr>
+<td>First Name : </td>
+<td> <input type="text" id="firstname" size="10"/> </td>
+</tr>
+
+<tr>
+<td>Idbooster : </td>
+<td> <input type="text" id="idbooster" size="10"/> </td>
+</tr>
+
+<tr>
+<td>Birthdate : </td>
+<td> <input type="text" id="birthdate" size="10"/> </td>
+</tr>
+
+</table>
+    </body>
+</html>
